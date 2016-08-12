@@ -2,15 +2,19 @@ import Queue
 import threading
 import os
 import urllib2
+from os.path import expanduser
 
-threads 10
-
+threads     = 10
 target      = "http://www.blackhatpython.com"
-directory   = "/Users/justin/Downloads/joomla-3.1.1"
 filters     = [".jpg", ".gif", ".png", ".css"]
 
-os chdir(directory)
+home        = expanduser("~")
+if os.name == 'nt':
+    directory = home + "\\Downloads\\joomla-3.1.1"
+else:
+    directory = home + "/Downloads/joomla-3.1.1"
 
+os.chdir(directory)
 web_paths = Queue.Queue()
 
 for r, d, f in os.walk("."):
@@ -35,7 +39,7 @@ def test_remote():
             print "[%d] => %s" % (response.code, path)
             response.close()
         except urllib2.HTTPError as error:
-            #[rint "Failed %s" % error.code
+            print "Failed %s" % error.code
             pass
 
 for i in range(threads):
